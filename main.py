@@ -1,13 +1,16 @@
 import requests
-from RandomWordGenerator import RandomWord
 import bs4
 import random
 from colorama import Fore, Back, Style
 from colorama import init
 import string
+import os
 
 init()
-
+def save():
+    with open('Valid.txt', 'a', encoding = 'UTF-8') as f:
+        f.write('\n{}'.format(url))
+        
 
 def make_url():
     global url, random_string
@@ -20,12 +23,14 @@ def make_url():
         random_string += random.choice(letters_and_digits)
     url = 'https://ghostbin.co/paste/{}'.format(random_string)
 
+
 while True:
     make_url()
     r = requests.get(url)
-    html = bs4.BeautifulSoup(r.text)
     if r.status_code == 404:
         print('[{}BAD{}] {}'.format(Fore.RED, Style.RESET_ALL, url))
     if r.status_code == 200:
-        print('[{}GOOD{}] {} '.format(Fore.GREEN, Style.RESET_ALL, url, html.title.text))
+        print('[{}GOOD{}] {} '.format(Fore.GREEN, Style.RESET_ALL, url))
+        save()
+        
 
